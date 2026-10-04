@@ -27,7 +27,7 @@ Random Forest, scikit-learn Gradient Boosting and XGBoost were tuned with grid a
 
 All models land within 1–2 percentage points of each other, so the engineered features (title, sex, class, family size) matter more than the algorithm. The best model was retrained on all 891 passengers to predict the 418 test passengers, and the predictions were saved to [`submissions/submission.csv`](submissions/submission.csv) for the [Kaggle competition](https://www.kaggle.com/competitions/titanic).
 
-**Kaggle public score:** _to be added_
+**Kaggle public score:** 0.77511 (Gradient Boosting, tuned)
 
 ![Model comparison](images/model_comparison.png)
 
