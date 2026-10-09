@@ -51,6 +51,16 @@ A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting 
 | v1 | Gradient Boosting (tuned), original features | 0.77511 |
 | v2 | Voting ensemble, + group features | **0.79186** |
 
+## Would you have survived?
+
+[`survival-calculator/index.html`](survival-calculator/index.html) is an interactive page: pick a sex, ticket class, age and travelling party size, and a gradient boosting model trained on those four features (82.8% cross-validated accuracy) estimates your chance of survival. It also plots your odds across every age and lists the real passengers most similar to you.
+
+The page is a single static file; open it in a browser or host it on GitHub Pages. To retrain the model and refresh the data embedded in the page:
+
+```bash
+python survival-calculator/build_model.py
+```
+
 ## Project structure
 
 ```
@@ -58,6 +68,9 @@ A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting 
 ├── images/                # Charts saved by the notebook
 ├── notebooks/
 │   └── titanic_analysis.ipynb
+├── survival-calculator/
+│   ├── build_model.py                     # trains the model, embeds it in the page
+│   └── index.html                         # "Would you have survived?" page
 ├── submissions/
 │   ├── submission.csv                     # v1 Kaggle predictions
 │   └── submission_v2_groups_ensemble.csv  # v2 Kaggle predictions
