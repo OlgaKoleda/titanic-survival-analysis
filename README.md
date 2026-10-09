@@ -31,6 +31,25 @@ All models land within 1–2 percentage points of each other, so the engineered 
 
 ![Model comparison](images/model_comparison.png)
 
+## Group features and ensemble
+
+New features were added from `Cabin` (deck letter), `Ticket` (group size, fare per person) and `Name` (family groups). The strongest one is **group survival**: the survival rate of the *other* members of a passenger's family or ticket group. Families and travel groups tended to survive or die together.
+
+![Group survival](images/group_survival.png)
+
+| Feature set (tuned Gradient Boosting) | CV accuracy |
+|---|---|
+| Original features | 0.845 |
+| + deck & ticket | 0.848 |
+| + deck, ticket & group survival | **0.855** |
+
+A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting and XGBoost scored 0.852, about the same as the best single model.
+
+| Kaggle submission | Model | Public score |
+|---|---|---|
+| v1 | Gradient Boosting (tuned), original features | 0.77511 |
+| v2 | Voting ensemble, + group features | _to be added_ |
+
 ## Project structure
 
 ```
@@ -39,7 +58,8 @@ All models land within 1–2 percentage points of each other, so the engineered 
 ├── notebooks/
 │   └── titanic_analysis.ipynb
 ├── submissions/
-│   └── submission.csv     # Kaggle predictions for test.csv
+│   ├── submission.csv                     # v1 Kaggle predictions
+│   └── submission_v2_groups_ensemble.csv  # v2 Kaggle predictions
 ├── requirements.txt
 └── README.md
 ```
