@@ -10,6 +10,7 @@ Exploratory data analysis and a machine-learning model that predicts which passe
 - **Ticket class** mattered: 63% of 1st-class passengers survived, compared with 24% in 3rd class.
 - **Children** and passengers travelling in **small families** (2–4 people) had better chances.
 - A **Random Forest** model reaches ~82% cross-validated accuracy, beating a simple "all women survive" baseline (78%).
+- Adding **group survival** features and a model ensemble raised the Kaggle public score from **0.775 to 0.792**.
 
 ![Feature importance](images/feature_importance.png)
 
@@ -48,7 +49,7 @@ A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting 
 | Kaggle submission | Model | Public score |
 |---|---|---|
 | v1 | Gradient Boosting (tuned), original features | 0.77511 |
-| v2 | Voting ensemble, + group features | _to be added_ |
+| v2 | Voting ensemble, + group features | **0.79186** |
 
 ## Project structure
 
