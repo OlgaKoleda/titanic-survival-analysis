@@ -6,7 +6,7 @@ Exploratory data analysis and a machine-learning model that predicts which passe
 
 ## Notebooks
 
-The project is split into four short notebooks. Each one runs on its own, from top to bottom.
+The project is split into five short notebooks. Each one runs on its own, from top to bottom.
 
 | Notebook | What it covers |
 |---|---|
@@ -14,6 +14,7 @@ The project is split into four short notebooks. Each one runs on its own, from t
 | [02_modelling](notebooks/02_modelling.ipynb) | Feature engineering, model comparison, hyper-parameter tuning, first Kaggle submission |
 | [03_improvements](notebooks/03_improvements.ipynb) | Group survival, deck and ticket features, voting ensemble, second submission |
 | [04_pipelines](notebooks/04_pipelines.ipynb) | Rebuilding everything as a scikit-learn `Pipeline` with a custom transformer, leak-free cross-validation and pipeline tuning |
+| [05_saving_and_explaining](notebooks/05_saving_and_explaining.ipynb) | Saving the fitted pipeline with `joblib`, reusable code in `src/`, error analysis and SHAP explanations |
 
 ## Key findings
 
@@ -79,6 +80,25 @@ The pipeline submission (v3) scored 0.763 on Kaggle, about the same as v1: the p
 
 ![Pipeline grid search](images/pipeline_grid_search.png)
 
+## Understanding the model
+
+**Where is it wrong?** Out-of-fold predictions show the errors are concentrated in two groups: men in 1st class (35% error rate) and women in 3rd class (28%), where survival was close to a coin flip. For the other groups the model is right about 9 times out of 10.
+
+![Error rate by group](images/error_rate_by_group.png)
+
+**Why does it predict what it predicts?** SHAP values show how each feature pushes a prediction up or down. Being an adult man (`Title_Mr`) is the strongest signal against survival; a higher class and fare the strongest in favour.
+
+![SHAP beeswarm](images/shap_beeswarm.png)
+
+## Using the saved model
+
+The pipeline code lives in `src/`, so the model can be trained and used without a notebook:
+
+```bash
+python -m src.train                    # trains and saves models/titanic_pipeline.joblib
+python -m src.predict data/test.csv    # loads the saved model and predicts
+```
+
 ## Project structure
 
 ```
@@ -88,7 +108,14 @@ The pipeline submission (v3) scored 0.763 on Kaggle, about the same as v1: the p
 │   ├── 01_exploration.ipynb
 │   ├── 02_modelling.ipynb
 │   ├── 03_improvements.ipynb
-│   └── 04_pipelines.ipynb
+│   ├── 04_pipelines.ipynb
+│   └── 05_saving_and_explaining.ipynb
+├── src/
+│   ├── features.py        # TitanicFeatures transformer
+│   ├── pipeline.py        # make_titanic_pipeline()
+│   ├── train.py           # train and save the model
+│   └── predict.py         # predict with the saved model
+├── models/                # saved model (not committed – recreate with src.train)
 ├── submissions/           # Kaggle prediction files (v1, v2, v3)
 ├── requirements.txt
 └── README.md
@@ -101,8 +128,8 @@ The pipeline submission (v3) scored 0.763 on Kaggle, about the same as v1: the p
    ```bash
    pip install -r requirements.txt
    ```
-3. Open the notebooks in `notebooks/` in VS Code or Jupyter and run them in order (01 → 04).
+3. Open the notebooks in `notebooks/` in VS Code or Jupyter and run them in order (01 → 05).
 
 ## Tools
 
-Python · pandas · NumPy · Matplotlib · seaborn · scikit-learn · XGBoost · Jupyter
+Python · pandas · NumPy · Matplotlib · seaborn · scikit-learn · XGBoost · SHAP · joblib · Jupyter

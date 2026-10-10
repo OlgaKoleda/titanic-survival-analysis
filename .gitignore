@@ -1,6 +1,9 @@
 # Data (download from Kaggle)
 data/*.csv
 
+# Saved models (recreate with: python -m src.train)
+models/*.joblib
+
 # Python / Jupyter
 __pycache__/
 .ipynb_checkpoints/
