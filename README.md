@@ -4,6 +4,17 @@ Exploratory data analysis and a machine-learning model that predicts which passe
 
 ![Survival by sex and class](images/survival_by_sex_class.png)
 
+## Notebooks
+
+The project is split into four short notebooks. Each one runs on its own, from top to bottom.
+
+| Notebook | What it covers |
+|---|---|
+| [01_exploration](notebooks/01_exploration.ipynb) | Loading, cleaning and exploring the data with charts |
+| [02_modelling](notebooks/02_modelling.ipynb) | Feature engineering, model comparison, hyper-parameter tuning, first Kaggle submission |
+| [03_improvements](notebooks/03_improvements.ipynb) | Group survival, deck and ticket features, voting ensemble, second submission |
+| [04_pipelines](notebooks/04_pipelines.ipynb) | Rebuilding everything as a scikit-learn `Pipeline` with a custom transformer, leak-free cross-validation and pipeline tuning |
+
 ## Key findings
 
 - **Sex** was the strongest predictor: 74% of women survived versus 19% of men.
@@ -51,29 +62,31 @@ A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting 
 | v1 | Gradient Boosting (tuned), original features | 0.77511 |
 | v2 | Voting ensemble, + group features | **0.79186** |
 
-## Would you have survived?
+## Pipelines
 
-[`survival-calculator/index.html`](survival-calculator/index.html) is an interactive page: pick a sex, ticket class, age and travelling party size, and a gradient boosting model trained on those four features (82.8% cross-validated accuracy) estimates your chance of survival. It also plots your odds across every age and lists the real passengers most similar to you.
+The last notebook rebuilds the cleaning and the model as a single scikit-learn `Pipeline`:
 
-The page is a single static file; open it in a browser or host it on GitHub Pages. To retrain the model and refresh the data embedded in the page:
-
-```bash
-python survival-calculator/build_model.py
 ```
+raw CSV → TitanicFeatures (custom transformer) → ColumnTransformer (impute + one-hot) → Gradient Boosting
+```
+
+- Every cleaning step is refitted inside each cross-validation fold, so the score is free of data leakage by construction (0.843, compared with 0.841 for the manual approach: on this dataset the leakage turned out to be too small to measure).
+- Cleaning choices and model settings are tuned together with `GridSearchCV`.
+- New passengers and `test.csv` are predicted directly from raw columns with one call to `predict`.
+
+![Pipeline grid search](images/pipeline_grid_search.png)
 
 ## Project structure
 
 ```
 ├── data/                  # Kaggle CSVs (not committed – see below)
-├── images/                # Charts saved by the notebook
+├── images/                # Charts saved by the notebooks
 ├── notebooks/
-│   └── titanic_analysis.ipynb
-├── survival-calculator/
-│   ├── build_model.py                     # trains the model, embeds it in the page
-│   └── index.html                         # "Would you have survived?" page
-├── submissions/
-│   ├── submission.csv                     # v1 Kaggle predictions
-│   └── submission_v2_groups_ensemble.csv  # v2 Kaggle predictions
+│   ├── 01_exploration.ipynb
+│   ├── 02_modelling.ipynb
+│   ├── 03_improvements.ipynb
+│   └── 04_pipelines.ipynb
+├── submissions/           # Kaggle prediction files (v1, v2, v3)
 ├── requirements.txt
 └── README.md
 ```
@@ -85,7 +98,7 @@ python survival-calculator/build_model.py
    ```bash
    pip install -r requirements.txt
    ```
-3. Open `notebooks/titanic_analysis.ipynb` in VS Code or Jupyter and run all cells.
+3. Open the notebooks in `notebooks/` in VS Code or Jupyter and run them in order (01 → 04).
 
 ## Tools
 
