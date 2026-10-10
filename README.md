@@ -61,6 +61,7 @@ A soft-voting ensemble of Logistic Regression, Random Forest, Gradient Boosting 
 |---|---|---|
 | v1 | Gradient Boosting (tuned), original features | 0.77511 |
 | v2 | Voting ensemble, + group features | **0.79186** |
+| v3 | Pipeline: Gradient Boosting, original features + deck | 0.76315 |
 
 ## Pipelines
 
@@ -73,6 +74,8 @@ raw CSV → TitanicFeatures (custom transformer) → ColumnTransformer (impute +
 - Every cleaning step is refitted inside each cross-validation fold, so the score is free of data leakage by construction (0.843, compared with 0.841 for the manual approach: on this dataset the leakage turned out to be too small to measure).
 - Cleaning choices and model settings are tuned together with `GridSearchCV`.
 - New passengers and `test.csv` are predicted directly from raw columns with one call to `predict`.
+
+The pipeline submission (v3) scored 0.763 on Kaggle, about the same as v1: the pipeline makes the process safer and reusable, while the score gain came from better features (v2).
 
 ![Pipeline grid search](images/pipeline_grid_search.png)
 
